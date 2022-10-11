@@ -15,11 +15,15 @@ import { useMemo } from "react";
 export default function Header() {
   const { data: session, status } = useSession();
 
-  const RightCorner = useMemo(() => {
+  const right = useMemo(() => {
     if (status === "loading") {
-      return () => <Loading type="points-opacity"></Loading>;
+      return (
+        <>
+          <Loading type="points-opacity"></Loading>
+        </>
+      );
     } else if (status === "unauthenticated") {
-      return () => (
+      return (
         <>
           <Button auto flat as={Link} href="/api/auth/signin">
             <Text>Login</Text>
@@ -27,7 +31,7 @@ export default function Header() {
         </>
       );
     } else {
-      return () => (
+      return (
         <>
           <Popover placement="bottom-right">
             <Popover.Trigger>
@@ -56,9 +60,7 @@ export default function Header() {
       </Navbar.Brand>
       {/* <Navbar.Content hideIn="xs">About</Navbar.Content> */}
       <Navbar.Content>
-        <Navbar.Item>
-          <RightCorner />
-        </Navbar.Item>
+        <Navbar.Item>{right}</Navbar.Item>
       </Navbar.Content>
     </Navbar>
   );
