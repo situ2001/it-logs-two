@@ -1,8 +1,6 @@
-import { Tweet } from "@prisma/client";
+import { Relation } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 import prisma from "../../lib/prisma";
 import { options } from "./auth/[...nextauth]";
 
@@ -19,11 +17,17 @@ export default async function handler(
 
   const user = await prisma.user.findFirst({
     where: { name: session?.user?.name, email: session?.user?.email },
+    select: { relationAsInvitee: true, relationAsinviter: true },
   });
   if (user) {
-    const relation = await prisma.relation.findFirst({
-      where: { OR: [{ inviteeUser: user }, { inviterUser: user }] },
-    });
+    let relation: Relation | null = null;
+    // choose 1 in 2
+    if (user.relationAsInvitee && !user.relationAsinviter) {
+      relation = user.relationAsInvitee;
+    } else if (!user.relationAsInvitee && user.relationAsinviter) {
+      relation = user.relationAsinviter;
+    }
+
     if (relation) {
       if (req.method === "GET") {
         const tweets = await prisma.tweet.findMany({
@@ -48,11 +52,11 @@ export default async function handler(
         });
 
         res.status(200).json(tweets);
-        return;
       }
+    } else {
+      res.status(404).json({ message: "Please join a relation first" });
     }
+  } else {
+    res.status(404).json({ message: "User not found" });
   }
-
-  res.status(404).json({ message: "Not found" });
-  return;
 }
