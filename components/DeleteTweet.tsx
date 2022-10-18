@@ -45,13 +45,11 @@ export default function DeleteTweet(props: { id: string }) {
       }}
       shouldCloseOnInteractOutside={() => !deleting}
     >
-      <Tooltip content="Delete" rounded color="error">
-        <Popover.Trigger>
-          <Button size="sm" color="error" auto>
-            <TrashIcon />
-          </Button>
-        </Popover.Trigger>
-      </Tooltip>
+      <Popover.Trigger>
+        <Button size="sm" color="error" auto>
+          <TrashIcon />
+        </Button>
+      </Popover.Trigger>
       <Popover.Content>
         <Grid.Container
           css={{
