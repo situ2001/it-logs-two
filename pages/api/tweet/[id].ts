@@ -62,7 +62,7 @@ export default async function handler(
 
         // TODO may optimize this invocation
         const result = await prisma.tweet.updateMany({
-          where: { id, relation },
+          where: { id, relation, userId: user.id }, // only update self content
           data: {
             content,
           },
@@ -77,6 +77,7 @@ export default async function handler(
           where: {
             id,
             relation,
+            userId: user.id, // only delete self content
           },
         });
         if (result.count === 0) {
