@@ -36,4 +36,4 @@ const AppEditor = () => {
   );
 };
 
-export default memo(AppEditor);
+export default AppEditor;
