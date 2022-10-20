@@ -16,7 +16,7 @@ export const getFormattedTimeDuration = (date: Date) => {
   }
 
   const hours = Math.floor(minutes / 60);
-  if (hours > 1 && hours < 24) {
+  if (hours >= 1 && hours < 24) {
     return `${hours} hours ago`;
   }
 
