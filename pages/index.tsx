@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           <>
             <AppEditor />
             {data.map((t: ReturningTweet, i: number) => (
-              <TweetCard key={i} data={t} />
+              <TweetCard key={t.id} data={t} />
             ))}
           </>
         );
